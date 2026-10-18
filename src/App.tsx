@@ -268,8 +268,15 @@ export const App: React.FC = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           {/* Logo & Brand */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#008C45] flex items-center justify-center text-white shadow-xs">
-              <RotateCw className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-xl overflow-hidden flex items-center justify-center shadow-xs shrink-0">
+              <svg viewBox="0 0 100 100" className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="50" cy="50" r="46" fill="#008C45" />
+                <path d="M50 4 A46 46 0 0 1 82 17 L50 50 Z" fill="#0f766e" />
+                <path d="M82 17 A46 46 0 0 1 96 50 L50 50 Z" fill="#166534" />
+                <path d="M96 50 A46 46 0 0 1 82 83 L50 50 Z" fill="#0369a1" />
+                <circle cx="50" cy="50" r="14" fill="#ffffff" />
+                <circle cx="50" cy="50" r="8" fill="#008C45" />
+              </svg>
             </div>
             <div className="flex items-center gap-2">
               <h1 className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
