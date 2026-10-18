@@ -54,7 +54,7 @@ export const Wheel: React.FC<WheelProps> = ({
 
   useEffect(() => {
     const handleFsChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      setIsFullscreen(document.fullscreenElement === containerRef.current);
       setRenderCount((c) => c + 1);
     };
     const handleResize = () => {
@@ -71,7 +71,7 @@ export const Wheel: React.FC<WheelProps> = ({
   const toggleFullscreen = async () => {
     if (!containerRef.current) return;
     try {
-      if (!document.fullscreenElement) {
+      if (document.fullscreenElement !== containerRef.current) {
         await containerRef.current.requestFullscreen();
       } else {
         await document.exitFullscreen();
@@ -105,7 +105,8 @@ export const Wheel: React.FC<WheelProps> = ({
     const centerX = size / 2;
     const centerY = size / 2;
     const rimWidth = Math.max(10, size * 0.024);
-    const radius = centerX - rimWidth - 8;
+    const pointerExtra = Math.max(18, Math.round(rimWidth * 1.5)) + 14;
+    const radius = centerX - rimWidth - pointerExtra;
 
     if (total === 0) {
       // Draw outer rim
@@ -348,7 +349,7 @@ export const Wheel: React.FC<WheelProps> = ({
       className={`relative flex flex-col items-center justify-center w-full select-none ${
         isFullscreen
           ? 'fixed inset-0 z-50 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-6 flex items-center justify-center'
-          : 'max-w-[580px] mx-auto'
+          : 'w-full max-w-[580px] mx-auto'
       }`}
     >
       {/* Top right toolbar (Sound & Fullscreen) */}
@@ -384,8 +385,8 @@ export const Wheel: React.FC<WheelProps> = ({
       <div
         className="relative flex items-center justify-center shrink-0 my-auto"
         style={{
-          width: isFullscreen ? 'min(75vw, 70vh)' : 'min(100%, 72vh, 560px)',
-          height: isFullscreen ? 'min(75vw, 70vh)' : 'min(100%, 72vh, 560px)',
+          width: isFullscreen ? 'min(80vw, 75vh)' : 'min(100%, 72vh, 560px)',
+          maxWidth: isFullscreen ? 'min(80vw, 75vh)' : 'min(100%, 560px)',
           aspectRatio: '1 / 1',
         }}
       >
