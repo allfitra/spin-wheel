@@ -10,7 +10,6 @@ import {
   Sliders,
   History as HistoryIcon,
   Sparkles,
-  ShieldCheck,
   Maximize,
   Minimize,
 } from 'lucide-react';
