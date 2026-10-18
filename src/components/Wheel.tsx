@@ -82,6 +82,7 @@ export const Wheel: React.FC<WheelProps> = ({
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     const size = Math.floor(rect.width);
+    if (size <= 0) return;
 
     if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
       canvas.width = size * dpr;

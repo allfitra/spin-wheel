@@ -39,7 +39,7 @@ const DEFAULT_SAMPLE_NAMES = [
 const DEFAULT_SETTINGS: SpinSettings = {
   winnerCount: 10,
   prizeLabel: 'Doorprize Utama',
-  removeWinnersAfterSpin: true,
+  removeWinnersAfterSpin: false,
   spinDurationSeconds: 6,
   soundEnabled: true,
   allowDuplicates: false,
@@ -177,8 +177,20 @@ export const App: React.FC = () => {
 
   const handleRemoveWinnersAndClose = useCallback(() => {
     if (activeWinners.length > 0) {
-      const winnerSet = new Set(activeWinners.map((w) => w.toLowerCase()));
-      setParticipants((prev) => prev.filter((p) => !winnerSet.has(p.toLowerCase())));
+      const toRemove = activeWinners.map((w) => w.toLowerCase());
+      setParticipants((prev) => {
+        const remaining = [...toRemove];
+        const result: string[] = [];
+        for (const p of prev) {
+          const idx = remaining.indexOf(p.toLowerCase());
+          if (idx !== -1) {
+            remaining.splice(idx, 1);
+          } else {
+            result.push(p);
+          }
+        }
+        return result;
+      });
       setToastMessage(`${activeWinners.length} pemenang telah dihapus dari daftar.`);
       setTimeout(() => setToastMessage(null), 3000);
     }
@@ -190,8 +202,20 @@ export const App: React.FC = () => {
     setIsWinnerModalOpen(false);
 
     if (settings.removeWinnersAfterSpin && activeWinners.length > 0) {
-      const winnerSet = new Set(activeWinners.map((w) => w.toLowerCase()));
-      setParticipants((prev) => prev.filter((p) => !winnerSet.has(p.toLowerCase())));
+      const toRemove = activeWinners.map((w) => w.toLowerCase());
+      setParticipants((prev) => {
+        const remaining = [...toRemove];
+        const result: string[] = [];
+        for (const p of prev) {
+          const idx = remaining.indexOf(p.toLowerCase());
+          if (idx !== -1) {
+            remaining.splice(idx, 1);
+          } else {
+            result.push(p);
+          }
+        }
+        return result;
+      });
     }
 
     resetPhaseToIdle();
