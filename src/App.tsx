@@ -3,10 +3,7 @@ import {
   Sun,
   Moon,
   Laptop,
-  RotateCw,
-  RotateCcw,
   Users,
-  Trophy,
   Sliders,
   History as HistoryIcon,
   Sparkles,
@@ -269,7 +266,6 @@ export const App: React.FC = () => {
   };
 
   const totalParticipants = participants.length;
-  const isWinnerExceeded = totalParticipants > 0 && settings.winnerCount > totalParticipants;
   const actualWinnersToPick = Math.min(settings.winnerCount, totalParticipants);
 
   const effectivePalette = useMemo(
@@ -376,15 +372,15 @@ export const App: React.FC = () => {
       </header>
 
       {/* Main Layout: Wheel on Center-Left, Tabs on Right */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-2 flex flex-col justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Wheel Center-Left (Desktop 7 cols, Mobile Top) */}
           <div className="lg:col-span-7 flex flex-col items-center">
-            <div className="w-full bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm flex flex-col items-center relative overflow-hidden">
+            <div className="w-full bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm flex flex-col relative overflow-hidden">
               {/* Prize Badge */}
-              <div className="mb-2 text-center">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/80 text-[#008C45] dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60">
-                  <Trophy className="w-3.5 h-3.5 text-[#008C45]" />
+              <div className="text-left">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/80 text-[#008C45] dark:text-emerald-300">
+                  {/* <Trophy className="w-3.5 h-3.5 text-[#008C45]" /> */}
                   <span>{settings.prizeLabel || 'Sesi Undian'}</span>
                 </span>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -415,8 +411,8 @@ export const App: React.FC = () => {
               />
 
               {/* Main Spin Action Button */}
-              <div className="w-full max-w-md mt-6 flex flex-col gap-2.5">
-                <button
+              {/* <div className="w-full max-w-md mt-6 flex flex-col gap-2.5"> */}
+                {/* <button
                   ref={spinButtonRef}
                   type="button"
                   onClick={startSpin}
@@ -440,9 +436,9 @@ export const App: React.FC = () => {
                       ? `Spin Sisa Peserta (${totalParticipants} Orang)`
                       : `Putar Sekarang (${actualWinnersToPick} Pemenang)`}
                   </span>
-                </button>
+                </button> */}
 
-                {history.length > 0 && (
+                {/* {history.length > 0 && (
                   <button
                     type="button"
                     onClick={handleUndoLastRound}
@@ -452,15 +448,15 @@ export const App: React.FC = () => {
                     <RotateCcw className="w-3.5 h-3.5 text-[#008C45]" />
                     <span>Undo Ronde Terakhir</span>
                   </button>
-                )}
-              </div>
+                )} */}
+              {/* </div> */}
             </div>
           </div>
 
           {/* Right Column: Tabbed Panel ("Peserta" & "Hasil") */}
           <div className="lg:col-span-5 flex flex-col gap-3">
             {/* Tab Header */}
-            <div className="flex p-1 rounded-2xl bg-slate-200/70 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+            <div className="flex p-1 rounded-xl bg-slate-200/70 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
               <button
                 type="button"
                 onClick={() => setActiveTab('peserta')}

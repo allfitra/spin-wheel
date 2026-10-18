@@ -32,6 +32,7 @@ export const Wheel: React.FC<WheelProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [cachedLogoImage, setCachedLogoImage] = useState<HTMLImageElement | null>(null);
+  const [renderCount, setRenderCount] = useState(0);
 
   const total = participants.length;
   const isSpinning = phase === 'spinning';
@@ -54,9 +55,17 @@ export const Wheel: React.FC<WheelProps> = ({
   useEffect(() => {
     const handleFsChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
+      setRenderCount((c) => c + 1);
+    };
+    const handleResize = () => {
+      setRenderCount((c) => c + 1);
     };
     document.addEventListener('fullscreenchange', handleFsChange);
-    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFsChange);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const toggleFullscreen = async () => {
@@ -81,7 +90,7 @@ export const Wheel: React.FC<WheelProps> = ({
 
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    const size = Math.floor(rect.width);
+    const size = Math.floor(Math.min(rect.width, rect.height));
     if (size <= 0) return;
 
     if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
@@ -331,7 +340,7 @@ export const Wheel: React.FC<WheelProps> = ({
     ctx.restore();
 
     ctx.restore();
-  }, [participants, currentAngle, total, winningSet, isStopped, isSpinning, palette, cachedLogoImage]);
+  }, [participants, currentAngle, total, winningSet, isStopped, isSpinning, palette, cachedLogoImage, renderCount]);
 
   return (
     <div
@@ -339,7 +348,7 @@ export const Wheel: React.FC<WheelProps> = ({
       className={`relative flex flex-col items-center justify-center w-full select-none ${
         isFullscreen
           ? 'fixed inset-0 z-50 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-6 flex items-center justify-center'
-          : 'max-w-[620px] mx-auto'
+          : 'max-w-[580px] mx-auto'
       }`}
     >
       {/* Top right toolbar (Sound & Fullscreen) */}
@@ -373,9 +382,12 @@ export const Wheel: React.FC<WheelProps> = ({
 
       {/* Wheel Canvas */}
       <div
-        className={`relative w-full aspect-square flex items-center justify-center ${
-          isFullscreen ? 'max-w-[85vh]' : 'max-w-[560px]'
-        }`}
+        className="relative flex items-center justify-center shrink-0 my-auto"
+        style={{
+          width: isFullscreen ? 'min(75vw, 70vh)' : 'min(100%, 72vh, 560px)',
+          height: isFullscreen ? 'min(75vw, 70vh)' : 'min(100%, 72vh, 560px)',
+          aspectRatio: '1 / 1',
+        }}
       >
         <canvas
           ref={canvasRef}
@@ -384,9 +396,10 @@ export const Wheel: React.FC<WheelProps> = ({
               onSpinClick();
             }
           }}
-          className={`w-full h-full drop-shadow-lg transition-transform ${
+          className={`w-full h-full block drop-shadow-lg transition-transform ${
             disabled || isSpinning || total === 0 ? 'cursor-not-allowed' : 'cursor-pointer'
           }`}
+          style={{ aspectRatio: '1 / 1' }}
           aria-label="Roda Undian - Klik untuk Memutar"
           role="button"
           tabIndex={0}
@@ -404,7 +417,7 @@ export const Wheel: React.FC<WheelProps> = ({
             type="button"
             onClick={onSpinClick}
             disabled={disabled || isSpinning || total === 0}
-            className={`absolute z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full font-bold text-sm sm:text-base uppercase tracking-wider shadow-lg transition-all duration-200 flex flex-col items-center justify-center focus:outline-none focus:ring-4 focus:ring-emerald-400 active:scale-95 ${
+            className={`absolute z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg transition-all duration-200 flex flex-col items-center justify-center focus:outline-none focus:ring-4 focus:ring-emerald-400 active:scale-95 ${
               isSpinning
                 ? 'bg-amber-600 text-white cursor-wait animate-pulse'
                 : total === 0 || disabled
@@ -421,8 +434,8 @@ export const Wheel: React.FC<WheelProps> = ({
               </span>
             ) : (
               <>
-                <span className="text-base sm:text-lg font-black">SPIN</span>
-                <span className="text-[9px] opacity-85 font-medium tracking-normal">KLIK DISINI</span>
+                <span className="text-sm sm:text-base font-black">SPIN</span>
+                <span className="text-[8px] sm:text-[9px] opacity-85 font-medium tracking-normal">KLIK DISINI</span>
               </>
             )}
           </button>
